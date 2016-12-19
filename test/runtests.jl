@@ -1,4 +1,4 @@
-using StructuralEconometrics
+using StructuralEstimation
 using Base.Test
 
 # write your own tests here

@@ -1,4 +1,4 @@
-module StructuralEconometrics
+module StructuralEstimation
 
 using Reexport
 @reexport using MDPTools
