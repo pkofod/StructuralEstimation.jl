@@ -20,7 +20,7 @@ Z2 = [ones(nX2) X2 -ones(nX2);
 
 U = LinearUtility([Z1, Z2], 0.99, [-.1;.2;1])
 
-sol = solve(U, S)
+sol = solve!(U, S)
 # 3 Simulate Data
 T = 12*3
 N = 20
@@ -42,6 +42,7 @@ F2hat = F2hat./vec(sum(F2hat,2))
 estimated_S = States(State(X1, F1), CommonState(X2, F2hat))
 
 # Fit using NFXP
-U.Θ .*=0
-dixit_nfxp = fit_nfxp(U, estimated_S, D)
-dixit_npl = fit_npl(U, S, D)
+U = LinearUtility([Z1, Z2], 0.99, 0*[-.1;.2;1])
+@time dixit_nfxp = fit_nfxp(U, estimated_S, D)
+U = LinearUtility([Z1, Z2], 0.99, 0*[-.1;.2;1])
+@time dixit_npl = fit_npl(U, S, D)

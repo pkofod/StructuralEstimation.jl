@@ -1,4 +1,4 @@
-using MDPTools, NestedFixedPoint
+using StructuralEstimation
 using DataFrames
 
 # 1 Data
@@ -47,6 +47,9 @@ a = vec(round(Int64,data[:a]))
 x = vec(round(Int64,data[:x]))
 
 D = Data(a, a+1, x)
-U.Θ*=0
-rust_nfxp = fit_nfxp(U, S, D; verbose = false);
-rust_npl = fit_npl(U, S, D)
+U = LinearUtility([Z1, Z2], 0.9999, [11., 3.]*0)
+@time rust_nfxp = fit_nfxp(U, S, D; verbose = false);
+U = LinearUtility([Z1, Z2], 0.9999, [11., 3.]*0)
+@profile rust_nfxp = fit_nfxp(U, S, D; verbose = false);
+U = LinearUtility([Z1, Z2], 0.9999, [11., 3.]*0)
+@time rust_npl = fit_npl(U, S, D)

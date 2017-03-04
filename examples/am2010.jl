@@ -23,8 +23,8 @@ Z = [zeros(nX2*2, 3), # don't buy
              [-ones(nX2) log(X2) -ones(nX2); # buy
 			  -ones(nX2) log(X2)  zeros(nX2)]]
 
-U = LinearUtility(Z, bdisc, truepar)
-
+U = LinearUtility(Z, bdisc, copy(truepar))
+#plot(policy(U), labels=["Exit" "Entry"], xticks=(1:10,[1:5;1:5]), xlabel="Market State", annotations=[(2.5,0.5, text("Not present", :white)),(7.5,0.5, text("Present", :white))])
 M, N, T = 2, 100, 1000
 D = simulate(U, S, M, N, T)
 
@@ -39,7 +39,14 @@ estimated_F2 = n_transitions./sum(n_transitions,2)
 
 estimated_S =  States(S1, CommonState(X2, estimated_F2))
 
-U.Θ*=0.0
+U = LinearUtility(Z, bdisc, copy(truepar)*0);
+am_nfxp = fit_nfxp(U, estimated_S, D);
+estimated_S =  States(S1, CommonState(X2, estimated_F2));
+U = LinearUtility(Z, bdisc, copy(truepar)*0);
+am_npl = fit_npl(U, estimated_S, D);
+@time 1+1
+U = LinearUtility(Z, bdisc, copy(truepar)*0)
 @time am_nfxp = fit_nfxp(U, estimated_S, D)
-U.Θ.*=0.0 # P will get overwritten by the initial non-parametric fitting
-@time am_npl = fit_npl(U, estimated_S, D; method = Optim.BFGS(linesearch = LineSearches.morethuente!))
+estimated_S =  States(S1, CommonState(X2, estimated_F2));
+U = LinearUtility(Z, bdisc, copy(truepar)*0);
+@time am_npl = fit_npl(U, estimated_S, D)
